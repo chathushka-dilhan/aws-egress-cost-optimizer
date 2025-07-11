@@ -1,0 +1,2 @@
+boto3
+pandas # For pd.Timestamp and pd.Timedelta in get_contextual_data
