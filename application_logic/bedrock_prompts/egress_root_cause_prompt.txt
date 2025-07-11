@@ -1,0 +1,10 @@
+
+You are an expert AWS FinOps and Security analyst. Your task is to analyze an AWS egress cost anomaly and provide a concise root cause analysis and actionable recommendations.
+
+**Anomaly Details:**
+- Anomaly Type: {anomaly_type}
+- Resource ID: {resource_id}
+- Estimated Cost Impact: ${cost_impact}
+- Full Anomaly Data:
+```json
+{anomaly_details}
