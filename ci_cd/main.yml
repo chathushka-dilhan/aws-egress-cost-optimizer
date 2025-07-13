@@ -1,0 +1,255 @@
+# aws-egress-cost-optimizer/.github/workflows/main.yml
+
+name: AWS Egress Cost Optimizer CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/**'
+      - 'data_processing_scripts/**'
+      - 'ml_models/**'
+      - 'application_logic/**'
+      - '.github/workflows/main.yml' # Trigger on pipeline changes
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/**'
+      - 'data_processing_scripts/**'
+      - 'ml_models/**'
+      - 'application_logic/**'
+      - '.github/workflows/main.yml'
+
+env:
+  # --- AWS Configuration ---
+  AWS_REGION: us-east-1 # IMPORTANT: Match your Terraform 'aws_region' variable
+
+  # --- Terraform Backend Configuration ---
+  TF_STATE_BUCKET: tfstate-egress-cost-optimizer-YOUR_ACCOUNT_ID # IMPORTANT: Match your versions.tf backend bucket
+  TF_STATE_KEY: terraform.tfstate
+  TF_STATE_REGION: us-east-1 # IMPORTANT: Match your versions.tf backend region
+  TF_STATE_DYNAMODB_TABLE: tfstate-egress-cost-optimizer-locks # IMPORTANT: Match your versions.tf backend DynamoDB table
+
+  # --- Project Specifics (match terraform/variables.tf) ---
+  PROJECT_NAME: egress-cost-optimizer
+  S3_BUCKET_SUFFIX: 12345abc # IMPORTANT: Match your terraform/variables.tf value
+
+  # --- S3 Bucket for Lambda Code & ML Scripts (derived from PROJECT_NAME and S3_BUCKET_SUFFIX) ---
+  LAMBDA_CODE_S3_BUCKET: ${{ env.PROJECT_NAME }}-lambda-code-${{ env.S3_BUCKET_SUFFIX }}
+  MODEL_ARTIFACTS_S3_BUCKET: ${{ env.PROJECT_NAME }}-ml-model-artifacts-${{ env.S3_BUCKET_SUFFIX }}
+  PROCESSED_DATA_S3_BUCKET: ${{ env.PROJECT_NAME }}-processed-data-${{ env.S3_BUCKET_SUFFIX }} # For Bedrock prompts
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9' # Match your Lambda/Glue/SageMaker Python version
+
+      - name: Install Python dependencies for linting/testing
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black boto3 pandas pyarrow scikit-learn joblib
+
+      - name: Lint Python scripts (Flake8)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+
+      - name: Format Python scripts (Black --check)
+        run: |
+          black . --check --diff
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 'latest' # Or a specific version like '1.5.7'
+
+      - name: Terraform Format Check
+        id: fmt
+        run: terraform fmt -check -recursive infrastructure/
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate infrastructure/
+
+      - name: Install tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0 # Use a specific version
+        with:
+          working_directory: infrastructure/
+          soft_fail: true # Allow pipeline to continue but warn on issues
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_OIDC_ROLE_NAME }} # OIDC Role ARN
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github-actions-egress-optimizer
+
+      - name: Terraform Init (for plan)
+        id: init_plan
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ env.TF_STATE_BUCKET }}" \
+            -backend-config="key=${{ env.TF_STATE_KEY }}" \
+            -backend-config="region=${{ env.TF_STATE_REGION }}" \
+            -backend-config="dynamodb_table=${{ env.TF_STATE_DYNAMODB_TABLE }}" \
+            infrastructure/
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -out=tfplan.binary infrastructure/
+          # Convert binary plan to JSON for Sentinel
+          terraform show -json tfplan.binary > tfplan.json
+        env:
+          # Pass Terraform variables from GitHub Actions secrets/variables
+          TF_VAR_notification_email: ${{ secrets.NOTIFICATION_EMAIL }}
+          TF_VAR_vpc_ids: ${{ secrets.VPC_IDS }} # Example: '["vpc-xxxxxxxxxxxxxxxxx", "vpc-yyyyyyyyyyyyyyyyy"]'
+          TF_VAR_s3_bucket_suffix: ${{ env.S3_BUCKET_SUFFIX }} # Ensure consistency
+        
+      - name: Install Sentinel CLI
+        run: |
+          curl -LO https://releases.hashicorp.com/sentinel/0.20.7/sentinel_0.20.7_linux_amd64.zip # Use latest stable version
+          unzip sentinel_0.20.7_linux_amd64.zip
+          sudo mv sentinel /usr/local/bin/
+          sentinel version
+
+      - name: Run Sentinel Policies
+        id: sentinel
+        # Sentinel requires the plan JSON and the policy file.
+        # It will exit with non-zero if policy fails.
+        run: |
+          sentinel apply -plan=tfplan.json -config=sentinel/policy.sentinel
+        working-directory: ${{ github.workspace }} # Run from root to access sentinel/
+        continue-on-error: false # Fail the pipeline if Sentinel policy fails
+
+      - name: Upload Terraform Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: infrastructure/tfplan.binary
+
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    needs: build-and-validate # Depends on successful build and validation
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' # Only deploy on push to main
+    environment: production # Use GitHub Environments for protection rules
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_OIDC_ROLE_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github-actions-egress-optimizer-deploy
+
+      - name: Download Terraform Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+          path: infrastructure/
+
+      - name: Terraform Init (for apply)
+        id: init_apply
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ env.TF_STATE_BUCKET }}" \
+            -backend-config="key=${{ env.TF_STATE_KEY }}" \
+            -backend-config="region=${{ env.TF_STATE_REGION }}" \
+            -backend-config="dynamodb_table=${{ env.TF_STATE_DYNAMODB_TABLE }}" \
+            infrastructure/
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve infrastructure/tfplan.binary
+
+  deploy-application-code:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure # Depends on successful infrastructure deployment
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_OIDC_ROLE_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github-actions-egress-optimizer-app-deploy
+
+      - name: Build and Deploy Lambda Functions
+        run: |
+          LAMBDA_FUNCTIONS=(
+            "anomaly_detector_trigger"
+            "bedrock_analyzer"
+            "remediation_orchestrator"
+          )
+
+          for func_name in "${LAMBDA_FUNCTIONS[@]}"; do
+            echo "--- Building and deploying $func_name Lambda ---"
+            FUNC_DIR="application_logic/lambda_functions/$func_name"
+            ZIP_FILE="$func_name.zip"
+            S3_KEY="lambda_functions/$ZIP_FILE"
+
+            # Install dependencies into a package directory
+            mkdir -p "$FUNC_DIR/package"
+            pip install -r "$FUNC_DIR/requirements.txt" --target "$FUNC_DIR/package"
+
+            # Zip the package contents
+            cd "$FUNC_DIR/package"
+            zip -r "$ZIP_FILE" .
+            mv "$ZIP_FILE" ../../.. # Move zip to root of repo for S3 upload
+            cd ../../.. # Go back to root of repo
+
+            # Add the lambda handler script to the zip
+            zip -g "$ZIP_FILE" "$FUNC_DIR/index.py"
+
+            # Upload to S3
+            aws s3 cp "$ZIP_FILE" "s3://${{ env.LAMBDA_CODE_S3_BUCKET }}/$S3_KEY"
+            echo "Uploaded $ZIP_FILE to s3://${{ env.LAMBDA_CODE_S3_BUCKET }}/$S3_KEY"
+
+            # Update Lambda function code
+            aws lambda update-function-code \
+              --function-name "${{ env.PROJECT_NAME }}-$func_name" \
+              --s3-bucket "${{ env.LAMBDA_CODE_S3_BUCKET }}" \
+              --s3-key "$S3_KEY" \
+              --publish
+            echo "Updated Lambda function ${{ env.PROJECT_NAME }}-$func_name"
+          done
+
+      - name: Upload Glue and SageMaker Processing Scripts
+        run: |
+          # Upload Glue scripts
+          aws s3 cp data_processing_scripts/glue_scripts/ "s3://${{ env.MODEL_ARTIFACTS_S3_BUCKET }}/glue_scripts/" --recursive
+          echo "Uploaded Glue scripts to s3://${{ env.MODEL_ARTIFACTS_S3_BUCKET }}/glue_scripts/"
+
+          # Upload SageMaker processing scripts
+          aws s3 cp data_processing_scripts/sagemaker_processing_scripts/ "s3://${{ env.MODEL_ARTIFACTS_S3_BUCKET }}/sagemaker_processing_scripts/" --recursive
+          echo "Uploaded SageMaker processing scripts to s3://${{ env.MODEL_ARTIFACTS_S3_BUCKET }}/sagemaker_processing_scripts/"
+
+          # Upload Bedrock prompts
+          aws s3 cp application_logic/bedrock_prompts/ "s3://${{ env.PROCESSED_DATA_S3_BUCKET }}/bedrock_prompts/" --recursive
+          echo "Uploaded Bedrock prompts to s3://${{ env.PROCESSED_DATA_S3_BUCKET }}/bedrock_prompts/"
+
