@@ -1,0 +1,38 @@
+# Policy: AWS Glue Job Security
+
+import "tfplan/v2" as tfplan
+
+param project_prefix
+param allowed_worker_types
+
+# Find all Glue jobs in the plan that are being created or updated
+all_glue_jobs = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_glue_job" and
+           r.change.after.name contains project_prefix
+  }
+)
+
+# Rule 1: Enforce allowed worker types for Glue jobs
+rule glue_job_worker_type_allowed {
+  all true for all_glue_jobs as _, job {
+    job.change.after.worker_type in allowed_worker_types
+  }
+}
+
+# Rule 2: Enforce encryption for Glue job data (if using Glue-managed encryption)
+# Note: This typically involves KMS key configuration on the S3 buckets Glue accesses
+# and sometimes encryption settings within Glue connections or security configurations.
+# This rule checks for a basic level of encryption enforcement.
+rule glue_job_encryption_enabled {
+  all true for all_glue_jobs as _, job {
+    # Check if security_configuration is set (implies encryption in transit/rest)
+    # Or, if data is read/written to S3, S3 bucket encryption should be enforced by s3_bucket_security policy.
+    job.change.after.security_configuration is "string" and length(job.change.after.security_configuration) > 0
+  }
+}
+
+# Combine all Glue job rules
+main = rule glue_job_worker_type_allowed and
+            glue_job_encryption_enabled

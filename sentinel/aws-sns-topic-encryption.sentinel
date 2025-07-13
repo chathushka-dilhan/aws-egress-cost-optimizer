@@ -1,0 +1,24 @@
+# Policy: AWS SNS Topic Encryption
+
+import "tfplan/v2" as tfplan
+
+param project_prefix
+
+# Find all SNS topics in the plan that are being created or updated
+all_sns_topics = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_sns_topic" and
+           r.change.after.name contains project_prefix
+  }
+)
+
+# Rule: Enforce SNS topic encryption (KMS)
+rule sns_topic_encryption_enabled {
+  all true for all_sns_topics as _, topic {
+    # Check if kms_master_key_id is set (implies KMS encryption)
+    topic.change.after.kms_master_key_id is "string" and length(topic.change.after.kms_master_key_id) > 0
+  }
+}
+
+main = rule sns_topic_encryption_enabled

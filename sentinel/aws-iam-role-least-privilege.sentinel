@@ -1,0 +1,68 @@
+# Policy: AWS IAM Role Least Privilege
+
+import "tfplan/v2" as tfplan
+import "json"
+
+param project_prefix
+
+# Find all IAM roles created or updated within our project scope
+all_iam_roles = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_iam_role" and
+           r.change.after.name contains project_prefix
+  }
+)
+
+# Find all IAM role policies created or updated within our project scope
+all_iam_role_policies = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_iam_role_policy" and
+           r.change.after.name contains project_prefix # Assuming policy names also follow project prefix
+  }
+)
+
+# Rule 1: No IAM roles should have assume_role_policy that allows "sts:AssumeRole" from "AWS" (any principal)
+rule no_assume_role_from_any_principal {
+  all true for all_iam_roles as _, role {
+    assume_policy = json.parse(role.change.after.assume_role_policy)
+    all true for assume_policy.Statement as _, statement {
+      not (statement.Action is "string" and statement.Action == "sts:AssumeRole" and
+           statement.Principal is "map" and statement.Principal.AWS is "string" and statement.Principal.AWS == "*")
+    }
+  }
+}
+
+# Rule 2: No IAM policies (inline or attached) should contain "Effect": "Allow" with "Resource": "*" and "Action": "*"
+rule no_wildcard_resource_and_action {
+  all true for all_iam_role_policies as _, policy {
+    policy_doc = json.parse(policy.change.after.policy)
+    all true for policy_doc.Statement as _, statement {
+      not (statement.Effect == "Allow" and
+           (statement.Resource is "string" and statement.Resource == "*") and
+           (statement.Action is "string" and statement.Action == "*"))
+    }
+  }
+}
+
+# Rule 3: No IAM policies should contain "Effect": "Allow" with "Action": "*", unless explicitly justified (e.g., specific service roles)
+rule no_wildcard_action_unless_service_role {
+  all true for all_iam_role_policies as _, policy {
+    policy_doc = json.parse(policy.change.after.policy)
+    all true for policy_doc.Statement as _, statement {
+      not (statement.Effect == "Allow" and
+           (statement.Action is "string" and statement.Action == "*") and
+           # Allow specific service roles that might use broad actions (e.g., AWSGlueServiceRole)
+           # You might need to refine this based on your actual managed policy attachments.
+           not (policy.change.after.role_arn contains "service-role/AWSGlueServiceRole" or
+                policy.change.after.role_arn contains "service-role/AmazonSageMakerFullAccess")
+          )
+    }
+  }
+}
+
+# Combine all IAM rules
+main = rule no_assume_role_from_any_principal and
+            no_wildcard_resource_and_action and
+            no_wildcard_action_unless_service_role

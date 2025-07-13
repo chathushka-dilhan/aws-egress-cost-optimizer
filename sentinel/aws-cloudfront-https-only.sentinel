@@ -1,0 +1,28 @@
+# Policy: AWS CloudFront HTTPS Only
+
+import "tfplan/v2" as tfplan
+
+param project_prefix
+
+# Find all CloudFront distributions in the plan that are being created or updated
+all_cloudfront_distributions = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_cloudfront_distribution" and
+           r.change.after.comment contains project_prefix # Assuming comment contains project prefix
+  }
+)
+
+# Rule: Enforce HTTPS for viewer protocol policy
+rule cloudfront_https_only {
+  all true for all_cloudfront_distributions as _, dist {
+    all true for dist.change.after.default_cache_behavior as _, behavior {
+      behavior.viewer_protocol_policy == "https-only" or behavior.viewer_protocol_policy == "redirect-to-https"
+    }
+    all true for dist.change.after.ordered_cache_behavior as _, behavior {
+      behavior.viewer_protocol_policy == "https-only" or behavior.viewer_protocol_policy == "redirect-to-https"
+    }
+  }
+}
+
+main = rule cloudfront_https_only

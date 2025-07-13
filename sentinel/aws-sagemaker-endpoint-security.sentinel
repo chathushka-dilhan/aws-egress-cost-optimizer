@@ -1,0 +1,41 @@
+# Policy: AWS SageMaker Endpoint Security
+
+import "tfplan/v2" as tfplan
+
+param project_prefix
+param allowed_inference_instance_types
+
+# Find all SageMaker endpoint configurations in the plan
+all_sagemaker_endpoint_configs = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_sagemaker_endpoint_configuration" and
+           r.change.after.name_prefix contains project_prefix
+  }
+)
+
+# Rule 1: Enforce allowed instance types for SageMaker inference endpoints
+rule sagemaker_endpoint_instance_type_allowed {
+  all true for all_sagemaker_endpoint_configs as _, config {
+    all true for config.change.after.production_variants as _, variant {
+      variant.instance_type in allowed_inference_instance_types
+    }
+  }
+}
+
+# Rule 2: Enforce KMS encryption for SageMaker endpoint data volumes (if applicable)
+# Note: SageMaker endpoints encrypt data at rest by default using AWS-managed keys.
+# This policy checks for explicit KMS key usage if desired.
+rule sagemaker_endpoint_kms_encryption {
+  all true for all_sagemaker_endpoint_configs as _, config {
+    all true for config.change.after.production_variants as _, variant {
+      # Check if kms_key_id is explicitly set, or if it's implicitly encrypted (default)
+      # For a strict policy, you might require kms_key_id to be set.
+      variant.volume_kms_key_id is "string" and length(variant.volume_kms_key_id) > 0
+    }
+  }
+}
+
+# Combine all SageMaker endpoint rules
+main = rule sagemaker_endpoint_instance_type_allowed and
+            sagemaker_endpoint_kms_encryption

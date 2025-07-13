@@ -1,0 +1,64 @@
+# Policy: AWS Lambda Security
+
+import "tfplan/v2" as tfplan
+
+param project_prefix
+param allowed_runtime
+param max_memory_size
+param max_timeout
+
+# Find all Lambda functions in the plan that are being created or updated
+all_lambda_functions = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_lambda_function" and
+           r.change.after.function_name contains project_prefix
+  }
+)
+
+# Rule 1: Enforce allowed Lambda runtime
+rule lambda_runtime_allowed {
+  all true for all_lambda_functions as _, func {
+    func.change.after.runtime == allowed_runtime
+  }
+}
+
+# Rule 2: Enforce maximum memory size for Lambda functions
+rule lambda_memory_size_max {
+  all true for all_lambda_functions as _, func {
+    func.change.after.memory_size <= max_memory_size
+  }
+}
+
+# Rule 3: Enforce maximum timeout for Lambda functions
+rule lambda_timeout_max {
+  all true for all_lambda_functions as _, func {
+    func.change.after.timeout <= max_timeout
+  }
+}
+
+# Rule 4: Ensure Lambda functions are deployed from S3 (best practice)
+rule lambda_code_from_s3 {
+  all true for all_lambda_functions as _, func {
+    func.change.after.s3_bucket is "string" and length(func.change.after.s3_bucket) > 0 and
+    func.change.after.s3_key is "string" and length(func.change.after.s3_key) > 0
+  }
+}
+
+# Rule 5: Ensure Lambda functions are configured with a Dead Letter Queue (DLQ) for asynchronous invocations
+# This is a best practice for handling failed asynchronous invocations.
+rule lambda_dlq_configured {
+  all true for all_lambda_functions as _, func {
+    func.change.after.dead_letter_config is "list" and
+    length(func.change.after.dead_letter_config) > 0 and
+    func.change.after.dead_letter_config[0].target_arn is "string" and
+    length(func.change.after.dead_letter_config[0].target_arn) > 0
+  }
+}
+
+# Combine all Lambda rules
+main = rule lambda_runtime_allowed and
+            lambda_memory_size_max and
+            lambda_timeout_max and
+            lambda_code_from_s3 and
+            lambda_dlq_configured

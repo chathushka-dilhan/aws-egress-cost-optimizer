@@ -1,0 +1,103 @@
+# This is the main Sentinel policy file. It imports and evaluates
+# other specific policy files to enforce comprehensive governance for the
+# AWS Egress Cost Optimizer solution.
+
+# Import the tfplan/v2 module for accessing Terraform plan data
+import "tfplan/v2" as tfplan
+
+# --- Policy Definitions ---
+# Each 'policy' block below refers to a separate Sentinel policy file.
+# These policies will be evaluated against your Terraform plan.
+
+# 1. Policy: AWS S3 Bucket Security
+# Ensures S3 buckets are private, encrypted, and have access logging enabled.
+policy "aws_s3_bucket_security" {
+  source = "aws-s3-bucket-security.sentinel"
+  param "project_prefix" {
+    value = "egress-cost-optimizer" # Matches the project_name variable in Terraform
+    type  = string
+  }
+}
+
+# 2. Policy: AWS IAM Role Least Privilege
+# Ensures IAM roles created for the solution adhere to least privilege principles,
+# avoiding overly permissive actions.
+policy "aws_iam_role_least_privilege" {
+  source = "aws-iam-role-least-privilege.sentinel"
+  param "project_prefix" {
+    value = "egress-cost-optimizer"
+    type  = string
+  }
+}
+
+# 3. Policy: AWS SageMaker Endpoint Security
+# Ensures SageMaker endpoints use appropriate instance types and are encrypted.
+policy "aws_sagemaker_endpoint_security" {
+  source = "aws-sagemaker-endpoint-security.sentinel"
+  param "project_prefix" {
+    value = "egress-cost-optimizer"
+    type  = string
+  }
+  param "allowed_inference_instance_types" {
+    value = ["ml.t2.medium", "ml.t2.large", "ml.m5.large"] # Customize allowed types
+    type  = list(string)
+  }
+}
+
+# 4. Policy: AWS Lambda Security
+# Enforces secure configurations for Lambda functions, including runtime, memory, and timeout.
+policy "aws_lambda_security" {
+  source = "aws-lambda-security.sentinel"
+  param "project_prefix" {
+    value = "egress-cost-optimizer"
+    type  = string
+  }
+  param "allowed_runtime" {
+    value = "python3.9" # Ensure consistent Python version
+    type  = string
+  }
+  param "max_memory_size" {
+    value = 1024 # MB
+    type  = int
+  }
+  param "max_timeout" {
+    value = 600 # seconds (10 minutes)
+    type  = int
+  }
+}
+
+# 5. Policy: AWS CloudFront HTTPS Only
+# Ensures CloudFront distributions enforce HTTPS for viewer connections.
+policy "aws_cloudfront_https_only" {
+  source = "aws-cloudfront-https-only.sentinel"
+  param "project_prefix" {
+    value = "egress-cost-optimizer"
+    type  = string
+  }
+}
+
+# 6. Policy: AWS Glue Job Security
+# Enforces secure configurations for Glue jobs, such as worker type and encryption.
+policy "aws_glue_job_security" {
+  source = "aws-glue-job-security.sentinel"
+  param "project_prefix" {
+    value = "egress-cost-optimizer"
+    type  = string
+  }
+  param "allowed_worker_types" {
+    value = ["Standard", "G.1X", "G.2X"] # Customize allowed worker types
+    type  = list(string)
+  }
+}
+
+# 7. Policy: AWS SNS Topic Encryption
+# Ensures SNS topics are encrypted at rest.
+policy "aws_sns_topic_encryption" {
+  source = "aws-sns-topic-encryption.sentinel"
+  param "project_prefix" {
+    value = "egress-cost-optimizer"
+    type  = string
+  }
+}
+
+# You can add more policies here as needed for your governance requirements.

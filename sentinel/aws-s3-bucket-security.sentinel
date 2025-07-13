@@ -1,0 +1,63 @@
+# Policy: AWS S3 Bucket Security
+
+import "tfplan/v2" as tfplan
+
+param project_prefix
+
+# Find all S3 buckets in the plan that are being created or updated
+all_s3_buckets = tfplan.resource_changes.filter(
+  func(r) {
+    return (r.change.actions contains "create" or r.change.actions contains "update") and
+           r.type == "aws_s3_bucket" and
+           r.change.after.bucket contains project_prefix # Filter to our project's buckets
+  }
+)
+
+# Rule 1: Ensure S3 buckets are private (no public ACLs)
+rule s3_bucket_acl_private {
+  all true for all_s3_buckets as _, bucket {
+    bucket.change.after.acl is "string" and bucket.change.after.acl == "private"
+  }
+}
+
+# Rule 2: Enforce server-side encryption for S3 buckets
+rule s3_bucket_encryption_enabled {
+  all true for all_s3_buckets as _, bucket {
+    # Check if server_side_encryption_configuration is defined and has at least one rule
+    length(tfplan.find_resources("aws_s3_bucket_server_side_encryption_configuration",
+      {"bucket": bucket.address}
+    )) > 0
+  }
+}
+
+# Rule 3: Enforce S3 bucket versioning
+rule s3_bucket_versioning_enabled {
+  all true for all_s3_buckets as _, bucket {
+    # Check if versioning configuration is defined and status is "Enabled"
+    length(tfplan.find_resources("aws_s3_bucket_versioning",
+      {"bucket": bucket.address, "versioning_configuration.0.status": "Enabled"}
+    )) > 0
+  }
+}
+
+# Rule 4: Enforce S3 Block Public Access settings for all buckets
+rule s3_block_public_access {
+  all true for all_s3_buckets as _, bucket {
+    # Check if aws_s3_bucket_public_access_block resource is associated and configured
+    length(tfplan.find_resources("aws_s3_bucket_public_access_block",
+      {
+        "bucket": bucket.address,
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      }
+    )) > 0
+  }
+}
+
+# Combine all S3 rules
+main = rule s3_bucket_acl_private and
+            s3_bucket_encryption_enabled and
+            s3_bucket_versioning_enabled and
+            s3_block_public_access
