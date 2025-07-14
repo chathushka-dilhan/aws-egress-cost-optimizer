@@ -7,10 +7,10 @@ terraform {
   # IMPORTANT: You'll need to create this S3 bucket and DynamoDB table manually ONCE
   # before running `terraform init` for the first time.
   backend "s3" {
-    bucket         = "tfstate-egress-cost-optimizer-YOUR_ACCOUNT_ID" # <--- IMPORTANT: Customize this bucket name!
+    bucket         = "tfstate-egress-cost-optimizer-YOUR_ACCOUNT_ID" # IMPORTANT: Customize this bucket name!
     key            = "terraform.tfstate"
-    region         = "us-east-1" # <--- IMPORTANT: Use a dedicated region for your tfstate bucket
-    dynamodb_table = "tfstate-egress-cost-optimizer-locks" # <--- IMPORTANT: Customize this table name!
+    region         = "us-east-1" # IMPORTANT: Use a dedicated region for your tfstate bucket
+    dynamodb_table = "tfstate-egress-cost-optimizer-locks" # IMPORTANT: Customize this table name!
     encrypt        = true
   }
 
