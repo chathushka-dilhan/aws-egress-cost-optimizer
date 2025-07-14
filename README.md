@@ -22,7 +22,9 @@ For a comprehensive understanding of this solution, including the problem it sol
 
     - Detailed breakdown of the AWS resources provisioned by Terraform, organized by modules.
 
+4. [Sentinel Policies](./docs/04_sentinel_policies.MD)
 
+    - Explanation of the pre-deployment governance policies that ensure infrastructure compliance.
 
 
 
