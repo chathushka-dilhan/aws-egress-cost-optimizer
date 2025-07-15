@@ -1,0 +1,213 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.4 Chrome/138.0.7204.97 Electron/37.2.1 Safari/537.36" version="28.0.4">
+  <diagram name="Page-1" id="Z4UqKjHnFwPxhH736IHI">
+    <mxGraphModel dx="1234" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-67" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="10" width="810" height="1190" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-66" value="&lt;span class=&quot;selected&quot;&gt;Deploy Application Code&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#959595;horizontal=0;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="390" width="240" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-63" value="&lt;span class=&quot;selected&quot;&gt;Build &amp;amp; Validate&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#959595;horizontal=0;verticalAlign=bottom;align=center;" vertex="1" parent="1">
+          <mxGeometry x="560" y="200" width="240" height="960" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-62" value="&lt;span class=&quot;selected&quot;&gt;Deploy Infrastructure&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#959595;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="310" y="380" width="220" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-61" value="&lt;span class=&quot;selected&quot;&gt;Stages&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#959595;horizontal=0;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="240" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-60" value="&lt;span class=&quot;selected&quot;&gt;Triggers&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#959595;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="760" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-1" target="-TTsvgfWpncET6k_lZ0b-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-5" value="(&lt;span class=&quot;selected&quot;&gt;triggers)&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-TTsvgfWpncET6k_lZ0b-4">
+          <mxGeometry x="-0.15" y="-1" relative="1" as="geometry">
+            <mxPoint x="9" y="19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-1" value="&lt;span class=&quot;selected&quot;&gt;Push to main&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="160" y="60" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-2" target="-TTsvgfWpncET6k_lZ0b-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-7" value="(&lt;span class=&quot;selected&quot;&gt;triggers)&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-TTsvgfWpncET6k_lZ0b-6">
+          <mxGeometry x="-0.2167" y="-2" relative="1" as="geometry">
+            <mxPoint x="-13" y="22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-2" value="&lt;span class=&quot;selected&quot;&gt;Pull Request to main&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="520" y="60" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-3" target="-TTsvgfWpncET6k_lZ0b-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-3" target="-TTsvgfWpncET6k_lZ0b-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-64" value="(on success)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-TTsvgfWpncET6k_lZ0b-36">
+          <mxGeometry x="0.1" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-3" value="&lt;span class=&quot;selected&quot;&gt;Build &amp;amp; Validate&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="340" y="140" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-9" target="-TTsvgfWpncET6k_lZ0b-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-65" value="(on success)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-TTsvgfWpncET6k_lZ0b-37">
+          <mxGeometry y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-9" target="-TTsvgfWpncET6k_lZ0b-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-9" value="&lt;span class=&quot;selected&quot;&gt;Deploy Infrastructure&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;fontColor=#ffffff;strokeColor=#3700CC;" vertex="1" parent="1">
+          <mxGeometry x="80" y="220" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-10" target="-TTsvgfWpncET6k_lZ0b-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-10" value="&lt;span class=&quot;selected&quot;&gt;Deploy Application Code&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-11" target="-TTsvgfWpncET6k_lZ0b-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-11" value="&lt;span class=&quot;selected&quot;&gt;Checkout Code&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-12" target="-TTsvgfWpncET6k_lZ0b-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-12" value="&lt;span class=&quot;selected&quot;&gt;Set up Python&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="500" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-13" target="-TTsvgfWpncET6k_lZ0b-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-13" value="&lt;span class=&quot;selected&quot;&gt;Configure AWS Credentials&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="580" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-14" target="-TTsvgfWpncET6k_lZ0b-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-14" value="&lt;span class=&quot;selected&quot;&gt;Build &amp;amp; Deploy Lambda Functions&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="660" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-15" value="&lt;span class=&quot;selected&quot;&gt;Upload Glue &amp;amp; SageMaker Scripts&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="740" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-16" target="-TTsvgfWpncET6k_lZ0b-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-16" value="&lt;span class=&quot;selected&quot;&gt;Set up Terraform&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="500" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-18" target="-TTsvgfWpncET6k_lZ0b-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-18" value="&lt;span class=&quot;selected&quot;&gt;Checkout Code&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="420" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-19" target="-TTsvgfWpncET6k_lZ0b-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-19" value="&lt;span class=&quot;selected&quot;&gt;Configure AWS Credentials&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="580" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-20" target="-TTsvgfWpncET6k_lZ0b-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-20" value="&lt;span class=&quot;selected&quot;&gt;Download Plan Artifact&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="660" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-21" target="-TTsvgfWpncET6k_lZ0b-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-21" value="&lt;span class=&quot;selected&quot;&gt;Terraform Init (Apply)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="740" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-22" value="&lt;span class=&quot;selected&quot;&gt;Terraform Apply&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="820" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-23" target="-TTsvgfWpncET6k_lZ0b-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-23" value="&lt;span class=&quot;selected&quot;&gt;Set up Python &amp;amp; Install Deps&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="300" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-24" target="-TTsvgfWpncET6k_lZ0b-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-24" value="&lt;span class=&quot;selected&quot;&gt;Checkout Code&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="220" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-25" target="-TTsvgfWpncET6k_lZ0b-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-25" value="&lt;span class=&quot;selected&quot;&gt;Lint &amp;amp; Format Python&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="380" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-26" target="-TTsvgfWpncET6k_lZ0b-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-26" value="&lt;span class=&quot;selected&quot;&gt;Set up Terraform&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="460" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-27" target="-TTsvgfWpncET6k_lZ0b-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-27" value="&lt;span class=&quot;selected&quot;&gt;Terraform Validate &amp;amp; Fmt&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="540" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-28" target="-TTsvgfWpncET6k_lZ0b-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-28" value="&lt;span class=&quot;selected&quot;&gt;Install tfsec &amp;amp; Scan IaC&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="620" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-29" target="-TTsvgfWpncET6k_lZ0b-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-29" value="&lt;span class=&quot;selected&quot;&gt;Configure AWS Credentials&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="700" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-30" target="-TTsvgfWpncET6k_lZ0b-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-30" value="&lt;span class=&quot;selected&quot;&gt;Terraform Init (Plan)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="780" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-31" target="-TTsvgfWpncET6k_lZ0b-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-31" value="Terraform Plan" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="860" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-32" target="-TTsvgfWpncET6k_lZ0b-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-32" value="&lt;span class=&quot;selected&quot;&gt;Install Sentinel CLI&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="940" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-TTsvgfWpncET6k_lZ0b-33" target="-TTsvgfWpncET6k_lZ0b-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-33" value="&lt;span class=&quot;selected&quot;&gt;Run Sentinel Policies&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="1020" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-TTsvgfWpncET6k_lZ0b-34" value="&lt;span class=&quot;selected&quot;&gt;Upload Plan Artifact&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="1100" width="160" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
